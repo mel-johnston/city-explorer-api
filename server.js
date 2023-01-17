@@ -1,7 +1,5 @@
 'use strict';
 
-console.log('yas first server live');
-
 // ***** REQUIRES *****
 const express = require('express');
 require('dotenv').config();
@@ -25,7 +23,6 @@ app.get('/', (request, response) => {
 
 app.get('/weather', (request, response, next) => {
   try {
-    console.log(request.query);
 
     let lat = request.query.lat;
     let lon = request.query.lon;
@@ -33,7 +30,7 @@ app.get('/weather', (request, response, next) => {
 
     let dataToGroom = data.find(city => city.city_name === searchQuery);
     let dataToSend = new Forecast(dataToGroom);
-
+    console.log(dataToSend);
     response.status(200).send(dataToSend);
 
   } catch (error) {
@@ -45,7 +42,8 @@ app.get('/weather', (request, response, next) => {
 
 class Forecast {
   constructor(cityObj) {
-    
+    this.dateTime = cityObj.data[0].datetime;
+    this.description = cityObj.data[0].weather.description;
   }
 }
 
