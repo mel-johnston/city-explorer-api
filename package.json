@@ -2,7 +2,7 @@
   "name": "city-explorer-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,8 +10,8 @@
     "type": "git",
     "url": "git+https://github.com/mel-johnston/city-explorer-api.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Mel Johnston",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/mel-johnston/city-explorer-api/issues"
   },
