@@ -30,6 +30,7 @@ app.get('/weather', async (request, response, next) => {
 
     let weatherAxios = await axios.get(url);
     let weatherData = weatherAxios.data.data.map(day => new Forecast(day));
+    console.log(weatherData)
     response.status(200).send(weatherData);
 
   } catch (error) {
@@ -41,7 +42,7 @@ app.get('/weather', async (request, response, next) => {
 
 class Forecast {
   constructor(day) {
-    this.dateTime = day.dateTime;
+    this.dateTime = day.datetime;
     this.description = day.weather.description;
     this.highTemp = day.high_temp;
     this.lowTemp = day.low_temp;
