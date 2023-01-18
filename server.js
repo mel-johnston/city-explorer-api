@@ -25,18 +25,38 @@ app.get('/weather', async (request, response, next) => {
 
     let lat = request.query.lat;
     let lon = request.query.lon;
-    let city = request.query.city_name;
     let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${process.env.REACT_APP_WEATHERBIT_API_KEY}&days=5&units=I`;
 
     let weatherAxios = await axios.get(url);
     let weatherData = weatherAxios.data.data.map(day => new Forecast(day));
-    console.log(weatherData)
+    console.log(weatherData);
     response.status(200).send(weatherData);
 
   } catch (error) {
     next(error);
   }
 });
+
+app.get('/movie', async (request, response, next) => {
+  try {
+
+    let city = request.query.city_name;
+
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MDB_API_KEY}&query=${city}&page=1`
+
+    let movieAxios = await axios.get(url);
+    // console.log(movieAxios.data)
+    let movieData = movieAxios.data.map(movie => new Movies(movie));
+    console.log(movieData);
+
+    response.status(200).send(movieData);
+
+  } catch (error) {
+    next(error);
+  }
+
+});
+
 
 // ***** CLASS TO GROOM BULKY DATA ****
 
@@ -49,6 +69,12 @@ class Forecast {
   }
 }
 
+class Movies {
+  constructor(movie) {
+    this.title = movie.title;
+    this.overview = movie.overview;
+  }
+}
 
 // ***** ERRORS ****
 
