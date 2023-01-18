@@ -4,8 +4,7 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-
-let data = require('./data/weather.json');
+const axios = require('axios');
 
 // ***** APP === SERVER *****
 const app = express();
@@ -21,17 +20,18 @@ app.get('/', (request, response) => {
   response.status(200).send('Welcome to my server');
 });
 
-app.get('/weather', (request, response, next) => {
+app.get('/weather', async (request, response, next) => {
   try {
 
     let lat = request.query.lat;
     let lon = request.query.lon;
-    let searchQuery = request.query.city_name;
+    let city = request.query.city_name;
+    let url = `https://api.weatherbit.io/v2.0/forecast/daily?lat=${lat}&lon=${lon}&key=${process.env.REACT_APP_WEATHERBIT_API_KEY}&days=5&units=I`;
 
-    let dataToGroom = data.find(city => city.city_name === searchQuery);
-    let dataToSend = new Forecast(dataToGroom, lat, lon);
-    console.log(dataToSend);
-    response.status(200).send(dataToSend);
+    let weatherAxios = await axios.get(url);
+    let weatherData = weatherAxios.data.data.map(day => new Forecast(day));
+    console.log(weatherData)
+    response.status(200).send(weatherData);
 
   } catch (error) {
     next(error);
@@ -41,20 +41,16 @@ app.get('/weather', (request, response, next) => {
 // ***** CLASS TO GROOM BULKY DATA ****
 
 class Forecast {
-  constructor(cityObj, lat, lon) {
-    this.dateTimeOne = cityObj.data[0].datetime;
-    this.descriptionOne = cityObj.data[0].weather.description;
-    this.dateTimeTwo = cityObj.data[1].datetime;
-    this.descriptionTwo = cityObj.data[1].weather.description;
-    this.dateTimeThree = cityObj.data[2].datetime;
-    this.descriptionThree = cityObj.data[2].weather.description;
-    this.lat = lat;
-    this.lon = lon;
+  constructor(day) {
+    this.dateTime = day.datetime;
+    this.description = day.weather.description;
+    this.highTemp = day.high_temp;
+    this.lowTemp = day.low_temp;
   }
 }
 
 
-
+// ***** ERRORS ****
 
 app.get('*', (request, response) => {
   response.status(404).send('This page does not exist');
