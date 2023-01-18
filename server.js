@@ -45,8 +45,8 @@ app.get('/movie', async (request, response, next) => {
     let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_MDB_API_KEY}&query=${city}&page=1`
 
     let movieAxios = await axios.get(url);
-    // console.log(movieAxios.data)
-    let movieData = movieAxios.data.map(movie => new Movies(movie));
+    const topFive = movieAxios.data.results.splice(0,5);
+    let movieData = topFive.map(movie => new Movies(movie));
     console.log(movieData);
 
     response.status(200).send(movieData);
