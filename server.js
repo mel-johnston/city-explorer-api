@@ -5,10 +5,13 @@ require('dotenv').config();
 const cors = require('cors');
 
 const weather = require('./modules/weather.js');
+const getMovies = require('./modules/movies.js');
+
 const app = express();
 app.use(cors());
 
 app.get('/weather', weatherHandler);
+app.get('/movie', getMovies);
 
 function weatherHandler(request, response) {
   const { lat, lon } = request.query;
