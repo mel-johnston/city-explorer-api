@@ -1,6 +1,6 @@
 'use strict';
 
-let cache = require('./cache.js');
+const cache = require('./cache.js');
 const axios = require('axios');
 
 function getWeather(lat, lon) {
